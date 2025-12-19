@@ -1,31 +1,76 @@
 import { motion } from "framer-motion";
-import { Clock, Loader2, Send } from "lucide-react";
+import { AlertCircle, Clock, Loader2, Send } from "lucide-react";
 import { useState } from "react";
-import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { parseEther } from "viem"; // IMPORT PENTING: parseEther
+import {
+  useAccount,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from "wagmi";
 import { REKBER_ABI, REKBER_ADDRESS } from "../config/constants";
 
 export function CreateTransaction() {
+  const { address } = useAccount();
   const [buyer, setBuyer] = useState("");
   const [item, setItem] = useState("");
-  const [amount, setAmount] = useState("");
-  const [duration, setDuration] = useState("3"); // Default 3 Menit (buat testing)
 
-  const { data: hash, writeContract, isPending, error } = useWriteContract();
+  // amount menyimpan string angka murni ("500000")
+  const [amount, setAmount] = useState("");
+
+  const [duration, setDuration] = useState("3");
+  const [localError, setLocalError] = useState("");
+
+  const {
+    data: hash,
+    writeContract,
+    isPending,
+    error: contractError,
+  } = useWriteContract();
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
     hash,
   });
 
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Hapus titik/koma agar jadi angka murni untuk blockchain
+    const rawValue = e.target.value.replace(/\D/g, "");
+    setAmount(rawValue);
+  };
+
+  const getDisplayAmount = () => {
+    if (!amount) return "";
+    return new Intl.NumberFormat("id-ID").format(Number(amount));
+  };
+
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!buyer || !item || !amount || !duration) return;
+    setLocalError("");
 
-    writeContract({
-      address: REKBER_ADDRESS as `0x${string}`,
-      abi: REKBER_ABI,
-      functionName: "createTransaction",
-      // Parameter Contract V2: [Buyer, Item, Amount, Duration]
-      args: [buyer as `0x${string}`, item, BigInt(amount), BigInt(duration)],
-    });
+    if (!buyer || !item || !amount || !duration) {
+      setLocalError("Semua kolom wajib diisi!");
+      return;
+    }
+
+    if (address && buyer.toLowerCase() === address.toLowerCase()) {
+      setLocalError("Tidak bisa transaksi dengan diri sendiri.");
+      return;
+    }
+
+    try {
+      writeContract({
+        address: REKBER_ADDRESS as `0x${string}`,
+        abi: REKBER_ABI,
+        functionName: "createTransaction",
+        args: [
+          buyer as `0x${string}`,
+          item,
+          parseEther(amount), // PERBAIKAN DISINI: Gunakan parseEther
+          BigInt(duration),
+        ],
+      });
+    } catch (err) {
+      console.error(err);
+      setLocalError("Gagal membuat transaksi");
+    }
   };
 
   return (
@@ -44,6 +89,12 @@ export function CreateTransaction() {
       </p>
 
       <form onSubmit={handleCreate} className="space-y-5">
+        {localError && (
+          <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-2 text-red-400 text-xs font-bold">
+            <AlertCircle className="w-4 h-4" /> {localError}
+          </div>
+        )}
+
         <div className="space-y-2">
           <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
             Alamat Pembeli (Wallet)
@@ -77,11 +128,11 @@ export function CreateTransaction() {
             </label>
             <div className="relative">
               <input
-                type="number"
+                type="text"
                 placeholder="0"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500/50 transition-all"
+                value={getDisplayAmount()}
+                onChange={handleAmountChange}
+                className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500/50 transition-all font-mono"
               />
             </div>
           </div>
@@ -111,8 +162,7 @@ export function CreateTransaction() {
         >
           {isPending || isConfirming ? (
             <>
-              <Loader2 className="w-5 h-5 animate-spin" /> Memproses
-              Blockchain...
+              <Loader2 className="w-5 h-5 animate-spin" /> Memproses...
             </>
           ) : (
             <>
@@ -121,17 +171,17 @@ export function CreateTransaction() {
           )}
         </button>
 
-        {error && (
+        {contractError && (
           <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-xs mt-4 break-words">
-            Error: {error.message.split("\n")[0]}
+            Error: {contractError.message.split("\n")[0]}
           </div>
         )}
 
         {isSuccess && (
           <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-xl text-green-400 text-sm font-bold text-center mt-4">
-            ✅ Transaksi Berhasil Dibuat! <br />
+            ✅ Transaksi Berhasil! <br />
             <span className="text-xs font-normal text-gray-400">
-              Tunggu pembeli melakukan deposit.
+              Cek status di Public Explorer.
             </span>
           </div>
         )}

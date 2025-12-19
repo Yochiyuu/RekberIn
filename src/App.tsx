@@ -1,5 +1,6 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
+import { AdminDashboard } from "./pages/AdminDashboard";
 import { BuyToken } from "./pages/BuyToken";
 import { History } from "./pages/History";
 import { Home } from "./pages/Home";
@@ -16,6 +17,7 @@ function App() {
           <Route path="/app" element={<RekberApp />} />
           <Route path="/history" element={<History />} />
           <Route path="/buy" element={<BuyToken />} />
+          <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </div>
     </Router>

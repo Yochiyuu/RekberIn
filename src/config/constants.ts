@@ -2,7 +2,7 @@
 export const REKBER_ADDRESS = "0x556E713C8aDd9FbC7a4D4A6d877BEb0d7a3Ff0c6";
 
 export const REKBER_ABI = [
-  // --- FUNGSI UTAMA ---
+  // --- FUNGSI UTAMA (User) ---
   {
     inputs: [
       { internalType: "address", name: "_buyer", type: "address" },
@@ -48,6 +48,39 @@ export const REKBER_ABI = [
     name: "raiseDispute",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+
+  // --- FUNGSI ADMIN (Baru) ---
+  {
+    inputs: [
+      { internalType: "uint256", name: "_id", type: "uint256" },
+      { internalType: "address", name: "_winnerAddress", type: "address" },
+    ],
+    name: "resolveDispute",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "withdrawFees",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "totalFeeCollected",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "admin",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
     type: "function",
   },
 
