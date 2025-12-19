@@ -1,73 +1,66 @@
-# React + TypeScript + Vite
+# RekberIn | Decentralized Escrow Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![React](https://img.shields.io/badge/frontend-React_%2B_Vite-61DAFB.svg)
+![Solidity](https://img.shields.io/badge/smart__contract-Solidity-363636.svg)
+![Wagmi](https://img.shields.io/badge/web3-Wagmi_%2B_Viem-grey.svg)
 
-Currently, two official plugins are available:
+**RekberIn** is a decentralized application (dApp) that facilitates secure peer-to-peer transactions using blockchain technology. It acts as a trustless middleman (Escrow) where funds are locked in a smart contract and only released when specific conditions are met, protecting both Buyers and Sellers from fraud.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌟 Key Features
 
-## React Compiler
+### For Sellers
+- **Create Transaction:** Easily create a secured transaction link for your goods/services.
+- **Auto-Claim Guarantee:** Protection against non-responsive buyers. If the buyer disappears after the deadline, you can claim the funds automatically.
+- **Cancel Transaction:** Ability to cancel transactions before the buyer deposits funds.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### For Buyers
+- **Secure Deposit:** Funds are held safely in the Smart Contract, not sent directly to the seller.
+- **Inspection Period:** Time-bound guarantee to inspect the item before confirming the release of funds.
+- **Dispute System:** Ability to raise a dispute if the received item does not match the description.
 
-## Expanding the ESLint configuration
+### Platform & Admin
+- **Dispute Resolution:** Admin dashboard to adjudicate conflicts and decide whether to refund the buyer or release funds to the seller.
+- **Fee System:** 1% platform fee on successful transactions to support sustainability.
+- **Transparent Logic:** All rules are enforced by an immutable Smart Contract.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠️ Tech Stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Frontend:** React, TypeScript, Vite
+- **Styling:** Tailwind CSS, Framer Motion (Animations)
+- **Icons:** Lucide React
+- **Blockchain Interaction:** Wagmi, Viem, TanStack Query
+- **Smart Contract:** Solidity (EVM Compatible)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🚀 Getting Started
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Follow these steps to run the project locally:
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Prerequisites
+- Node.js (v18 or later)
+- MetaMask or any Web3 Wallet
+- Git
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Installation
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. **Clone the repository**
+   ```bash
+   git clone [https://github.com/yochiyuu/rekberin.git](https://github.com/yochiyuu/rekberin.git)
+   cd rekberin
+2. **Install dependencies**
+   ```bash
+   npm install
+3. **Run the development server**
+   ```bash
+   npm run dev
+
+### SmartContract Address
+1. **RekberIn V2**
+   ```bash
+   0x556E713C8aDd9FbC7a4D4A6d877BEb0d7a3Ff0c6
+2. **Payment Token**
+   ```bash
+   0x6a09F0B88E89E8fD256D3eEe01EE1Ab6E2537188
+3. **USDT (Mock)**
+   ```bash
+   0xCB0A85AE2B2Ea64924B06BC2B2379b5436072fc1
